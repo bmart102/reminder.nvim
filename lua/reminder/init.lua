@@ -88,9 +88,10 @@ function M.setup(opts)
 	opts = opts or {}
 	init_interval = opts.interval or DEFAULT_INTERVAL
 	init_message = opts.message or DEFAULT_MSG
+	local enableAutoStart = opts.enableAutoStart or false
 
 	vim.api.nvim_create_user_command("ReminderStart", function(opts)
-        opts = opts or {}
+		opts = opts or {}
 		local interval = opts.fargs[1] and tonumber(opts.fargs[1]) or init_interval
 		local message = opts.fargs[2] and table.concat(opts.fargs, " ", 2) or init_message
 		start_reminder({ interval = interval, message = message })
@@ -104,6 +105,9 @@ function M.setup(opts)
 	vim.api.nvim_create_user_command("ReminderCloseWndw", function()
 		close_reminder()
 	end, {})
+	if enableAutoStart then
+		start_reminder(opts)
+	end
 end
 
 return M
